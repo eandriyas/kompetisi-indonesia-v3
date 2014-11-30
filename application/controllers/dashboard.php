@@ -19,13 +19,13 @@ class dashboard extends base {
 		$this->load->library('pagination');
 		$config['per_page'] = 20;
 		$config['uri_segment'] = 3;
-		$config['num_link'] = 4;	
+		$config['num_link'] = 4;
 		$config['page_query_string'] = TRUE;
 		$config['base_url'] = site_url().'/dashboard?ki='.$this->input->get('ki',TRUE);
-		$config['total_rows'] = $this->m_kompetisi->count_diikuti_kompetisi($id); 
-		$this->pagination->initialize($config); 
+		$config['total_rows'] = $this->m_kompetisi->count_diikuti_kompetisi($id);
+		$this->pagination->initialize($config);
 		if(isset($_GET['per_page'])) {
-			if($_GET['per_page'] == '') { 
+			if($_GET['per_page'] == '') {
 				$uri = 0;
 			} else {
 				$uri = $_GET['per_page'];
@@ -51,18 +51,18 @@ class dashboard extends base {
 	public function ditandai(){
 		$data['script'] = '<script>$(document).ready(function(){$(\'#tandai\').addClass(\'active white-text\');});</script>';
 		$id = $this->session->userdata('id_user'); //mengambil data id user
-		$data['title'] = 'Kompetisi diikuti | ';	
+		$data['title'] = 'Kompetisi diikuti | ';
 		//pagination set up
 		$this->load->library('pagination');
 		$config['per_page'] = 20;
 		$config['uri_segment'] = 3;
-		$config['num_link'] = 4;	
+		$config['num_link'] = 4;
 		$config['page_query_string'] = TRUE;
 		$config['base_url'] = site_url().'/dashboard/ditandai?ki='.$this->input->get('ki',TRUE);
-		$config['total_rows'] = $this->m_kompetisi->count_tandai_kompetisi($id); 
-		$this->pagination->initialize($config); 
+		$config['total_rows'] = $this->m_kompetisi->count_tandai_kompetisi($id);
+		$this->pagination->initialize($config);
 		if(isset($_GET['per_page'])) {
-			if($_GET['per_page'] == '') { 
+			if($_GET['per_page'] == '') {
 				$uri = 0;
 			} else {
 				$uri = $_GET['per_page'];
@@ -75,12 +75,12 @@ class dashboard extends base {
 		} else {
 			$data['page'] = $this->pagination->create_links();
 		}
-		//end of pagination set up	
+		//end of pagination set up
 		//header view
 		$data['ikut'] = $this->m_kompetisi->count_diikuti_kompetisi($id);
 		$data['tandai'] = $this->m_kompetisi->count_tandai_kompetisi($id);
 		$data['kompetisiku'] = $this->m_kompetisi->count_kompetisiku($id);
-		$data['total'] = $this->m_kompetisi->count_tandai_kompetisi($id); 
+		$data['total'] = $this->m_kompetisi->count_tandai_kompetisi($id);
 		$data['view'] = $this->m_kompetisi->show_kompetisi_diikuti($id,$config['per_page'],$uri);
 		$this->defaultdisplay('dashboard/ditandai', $data);
 		$this->footerdisplay();
@@ -88,18 +88,18 @@ class dashboard extends base {
 	public function saya(){
 		$data['script'] = '<script>$(document).ready(function(){$(\'#saya\').addClass(\'active white-text\');});</script>';
 		$id = $this->session->userdata('id_user'); //mengambil data id user
-		$data['title'] = 'Kompetisi Upload Oleh Saya | ';	
+		$data['title'] = 'Kompetisi Upload Oleh Saya | ';
 		//pagination set up
 		$this->load->library('pagination');
 		$config['per_page'] = 20;
 		$config['uri_segment'] = 3;
-		$config['num_link'] = 4;	
+		$config['num_link'] = 4;
 		$config['page_query_string'] = TRUE;
 		$config['base_url'] = site_url().'/dashboard/saya?ki='.$this->input->get('ki',TRUE);
-		$config['total_rows'] = $this->m_kompetisi->count_kompetisiku($id); 
-		$this->pagination->initialize($config); 
+		$config['total_rows'] = $this->m_kompetisi->count_kompetisiku($id);
+		$this->pagination->initialize($config);
 		if(isset($_GET['per_page'])) {
-			if($_GET['per_page'] == '') { 
+			if($_GET['per_page'] == '') {
 				$uri = 0;
 			} else {
 				$uri = $_GET['per_page'];
@@ -115,8 +115,8 @@ class dashboard extends base {
 		//end of pagination set up
 		$data['ikut'] = $this->m_kompetisi->count_diikuti_kompetisi($id);
 		$data['tandai'] = $this->m_kompetisi->count_tandai_kompetisi($id);
-		$data['kompetisiku'] = $this->m_kompetisi->count_kompetisiku($id);	
-		$data['total'] = $this->m_kompetisi->count_kompetisiku($id); 
+		$data['kompetisiku'] = $this->m_kompetisi->count_kompetisiku($id);
+		$data['total'] = $this->m_kompetisi->count_kompetisiku($id);
 		$data['view'] = $this->m_kompetisi->get_competition_by_id_user($id,$config['per_page'],$uri);
 		$this->defaultdisplay('dashboard/saya', $data);
 		$this->footerdisplay();
@@ -124,7 +124,7 @@ class dashboard extends base {
 	public function pasang(){
 		$data['script'] = '<script>$(document).ready(function(){$(\'#saya\').addClass(\'active white-text\');});</script>';
 		//jika by tidak sama dengan username, maka dicancel
-		if( isset($_GET['by']) && $_GET['by'] == $this->session->userdata('username')) {			
+		if( isset($_GET['by']) && $_GET['by'] == $this->session->userdata('username')) {
 			$data['kat'] = $this->m_kompetisi->show_kat();
 			$data['main_kat'] = $this->m_kompetisi->show_main_kat_by_id();
 			$data['title'] = 'Pasang | ';
@@ -155,7 +155,7 @@ class dashboard extends base {
 		$data['sub_kat'] = $this->m_kompetisi->show_sub_kat_by_id($id_main_kat);
 		$data['view'] = $this->m_kompetisi->get_competition_by_id_kompetisi($id);
 		$this->defaultdisplay('dashboard/edit_kompetisi', $data);
-		$this->footerdisplay();	
+		$this->footerdisplay();
 	}
 	public function profile(){ //halaman untuk edit data user
 		$data['script'] = '<script>$(document).ready(function(){$(\'#edit\').addClass(\'active white-text\');});</script>';
@@ -197,11 +197,11 @@ class dashboard extends base {
 				case 'winner':
 					$data['winner'] = $this->m_kompetisi->winner_participans($idkompetisi);
 					$data['script'] = '<script>$(document).ready(function(){$(\'#saya\').addClass(\'active white-text\');$(\'#pemenang\').addClass(\'active \');});</script>';
-					break;				
+					break;
 				default:
 					$data['script'] = '<script>$(document).ready(function(){$(\'#saya\').addClass(\'active white-text\');$(\'#detail\').addClass(\'active \');});</script>';
 					break;
-			} 
+			}
 		} else {
 			$data['script'] = '<script>$(document).ready(function(){$(\'#saya\').addClass(\'active white-text\');$(\'#detail\').addClass(\'active \');});</script>';
 		}
@@ -231,7 +231,7 @@ class dashboard extends base {
 			$this->db->where('username',$username);
 			$getuser = $this->db->get('user');
 			$getuser = $getuser->row_array();
-			$iduser = $getuser['id_user'];	
+			$iduser = $getuser['id_user'];
 		}
 		$id = $_GET['id'];
 		$idkompetisi = $this->ki_id_dec($id); //id kompetisi
@@ -251,7 +251,7 @@ class dashboard extends base {
 			$this->db->where('username',$username);
 			$getuser = $this->db->get('user');
 			$getuser = $getuser->row_array();
-			$iduser = $getuser['id_user'];	
+			$iduser = $getuser['id_user'];
 		}
 		$id = $_GET['id'];
 		$idkompetisi = $this->ki_id_dec($id); //id kompetisi
@@ -274,8 +274,8 @@ class dashboard extends base {
 					$getuser = $this->db->get('user');
 					$getuser = $getuser->row_array();
 					$iduser = $getuser['id_user'];//iduser
-					$emailuser = $getuser['email'];					
-					
+					$emailuser = $getuser['email'];
+
 					$detail = $_POST['detail'];//detail pemenang
 					$hadiah = $_POST['hadiah'];//hadiah pemenang
 					$val_hadiah = 'Rp'.number_format($hadiah).',-';
@@ -297,7 +297,7 @@ class dashboard extends base {
 						$this->m_kompetisi->add_winner($params);
 						redirect(site_url('dashboard/manage?id='.$_POST['id'].'&act=winner'));
 					}
-					break;	
+					break;
 				case 'delete':
 					//data
 					$username = $_GET['username'];
@@ -361,7 +361,7 @@ class dashboard extends base {
 		if($tipe == 1){ //jelajah view | banner = 600 x 150
 			$config['max_size']  = '1000';//maks 1MB
 			$config['max_width']  = '600';
-			$config['max_height']  = '150';			
+			$config['max_height']  = '150';
 		} else if($tipe == 2){ //bottom fixed view | banner = 600 x 80
 			$config['max_size']  = '1000';//maks 1MB
 			$config['max_width']  = '600';

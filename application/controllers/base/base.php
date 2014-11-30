@@ -126,5 +126,72 @@ class base extends CI_Controller {
         }
 
 	}
+	//fungsi untuk kirim sms
+	public function send_sms($nohp){
+	//ambil user id	
+	// $user_id = $this->session->userdata('id_user');
+	//variable server	
+	$consumer_k = "bestapp266";
+	$consumer_s = "2AXO4";
+	$oauth_h = "http://sandbox.appprime.net";
+	$req_token_url = $oauth_h."/TemanDev/rest/RequestToken/";
+	$req_access_token = $oauth_h."/TemanDev/rest/AccessToken/";
+	//array input ke table oauth_consumer_registry
+	$server = array(
+	'consumer_key' => $consumer_k,
+	'consumer_secret' => $consumer_s,
+	'server_uri' => $oauth_h,
+	'authorize_uri' => '',
+	'request_token_uri' => $req_token_url,
+	'access_token_uri' => $req_access_token
+	);
+	// //koneksi database
+	// $hostname = 'localhost';
+	// $user = 'root';
+	// $password = 'list';
+	// $dbname = 'KI_db';
+	// $conn = new MySQLi($hostname, $user, $password, $dbname);
+	//konek ke database
+	// $store = OAuthStore::instance('MySQLi', array('conn' => $conn));
+	$store = OAuthStore::instance('Session', $server);
+	//simpan data server ke database
+	 // $consumer_key = $store->updateServer($server, $user_id);
+        //  STEP 1:  If we do not have an OAuth token yet, go get one
+        $getAuthTokenParams = null;
+  //       // get a request token
+        echo 'fetch request token..';
+        $tokenResultParams = OAuthRequester::requestRequestToken($consumer_k, 0, $getAuthTokenParams);
+		echo 'request token = '.$tokenResultParams["token"];
+        echo '';
+        // //  STEP 2:  Get an access token
+        try {
+            OAuthRequester::requestAccessToken($consumer_k, $tokenResultParams["token"], 0, 'POST');
+        }
+        catch (OAuthException2 $e)
+        {
+            var_dump($e);
+            return;
+        }        
+ 
+//         // make the docs request.
+        $urlAPI = $oauth_h.'/TemanDev/rest/sendSmsBulk/';
+        $opt = array(CURLOPT_HTTPHEADER=>array('Content-Type: application/json'));
+        $arr = array("smsBulk"=>array(
+        	'msisdn'=>$nohp, 
+        	'message'=>'Pengumuman Pemenang dari KompetisiIndonesia.com'));
+
+        // $body = {"":{"msisdn":"081320599744","message":"tes send sms"}};
+        $j_arr = json_encode($arr);       
+        $request = new OAuthRequester($urlAPI,'POST',$tokenResultParams,$j_arr);
+        echo 'execute api.. ';
+        $result = $request->doRequest(0,$opt);
+        if ($result['code'] == 200) {
+                echo $result['body'];
+        }
+        else {
+                echo 'Error: '.$result['code'];
+        }
+
+	}
 
 }
